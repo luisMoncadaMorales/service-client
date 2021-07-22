@@ -1,7 +1,10 @@
 package com.microservicios.serviceclient.ServiceTests;
 
+import com.microservicios.serviceclient.DTO.ClientDTO;
 import com.microservicios.serviceclient.Entities.Client;
 import com.microservicios.serviceclient.Persistence.ClientRepository;
+import com.microservicios.serviceclient.Services.ClientDTOService;
+import com.microservicios.serviceclient.Services.ClientDTOServiceImp;
 import com.microservicios.serviceclient.Services.ClientServiceImp;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,6 +24,10 @@ public class ClientServiceTest {
 
     @Mock
     private ClientRepository repository;
+
+    @Mock
+    private ClientDTOServiceImp clientDTOServiceImp;
+
     @BeforeEach
     public void setup(){
         MockitoAnnotations.openMocks(this);
@@ -32,11 +39,21 @@ public class ClientServiceTest {
                 .age(27)
                 .city("Envigado").build();
         List<Client> clients = Arrays.asList(client);
-        Mockito.when(repository.clients()).thenReturn(clients);
+        ClientDTO clientDTO=ClientDTO.builder()
+                .number_id(1052)
+                .type_id("cc")
+                .name("miguel")
+                .last_name("moncada")
+                .age(27)
+                .city("Envigado")
+                .photo("vacio").build();
+        List<ClientDTO> clientsDto = Arrays.asList(clientDTO);
+        Mockito.when(repository.clients(1)).thenReturn(clients);
+        Mockito.when(clientDTOServiceImp.listClientToDTO(clients)).thenReturn(clientsDto);
     }
     @Test
     public void clientsTest(){
-        List<Client> clients=service.clients();
+        List<ClientDTO> clients=service.clients(1);
         Assertions.assertThat(clients.size()).isEqualTo(1);
     }
 }

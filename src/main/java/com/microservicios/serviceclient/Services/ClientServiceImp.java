@@ -1,5 +1,6 @@
 package com.microservicios.serviceclient.Services;
 
+import com.microservicios.serviceclient.DTO.ClientDTO;
 import com.microservicios.serviceclient.Entities.Client;
 import com.microservicios.serviceclient.Persistence.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +12,11 @@ public class ClientServiceImp implements ClientService{
 
     @Autowired
     ClientRepository repository;
+    @Autowired
+    ClientDTOService clientDTOService;
     @Override
-    public List<Client> clients() {
-        return repository.clients();
+    public List<ClientDTO> clients(int age) {
+        List<Client> clients=repository.clients(age);
+        return clientDTOService.listClientToDTO(clients);
     }
 }

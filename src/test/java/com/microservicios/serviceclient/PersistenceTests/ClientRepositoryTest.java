@@ -30,11 +30,11 @@ public class ClientRepositoryTest {
                 .age(27)
                 .city("Envigado").build();
         List<Client> clients = Arrays.asList(client);
-        Mockito.when(repository.clients()).thenReturn(clients);
+        Mockito.when(repository.clients(1)).thenReturn(clients);
     }
     @Test
     public void clientsTest(){
-        List<Client> clients=repository.clients();
+        List<Client> clients=repository.clients(1);
         Assertions.assertThat(clients.size()).isEqualTo(1);
     }
 }
