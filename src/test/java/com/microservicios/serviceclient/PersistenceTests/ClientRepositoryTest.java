@@ -1,6 +1,7 @@
 package com.microservicios.serviceclient.PersistenceTests;
 
 import com.microservicios.serviceclient.Entities.Client;
+import com.microservicios.serviceclient.Entities.ClientPK;
 import com.microservicios.serviceclient.Persistence.ClientRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,9 +23,11 @@ public class ClientRepositoryTest {
     @BeforeEach
     public void setup(){
         MockitoAnnotations.openMocks(this);
-        Client client=Client.builder()
+        ClientPK clientPK= ClientPK.builder()
                 .number_id(1052)
-                .type_id("cc")
+                .type_id("cc").build();
+        Client client=Client.builder()
+                .clientPk(clientPK)
                 .name("miguel")
                 .last_name("moncada")
                 .age(27)

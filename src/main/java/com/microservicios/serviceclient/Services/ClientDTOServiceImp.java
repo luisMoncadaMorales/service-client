@@ -2,19 +2,18 @@ package com.microservicios.serviceclient.Services;
 
 import com.microservicios.serviceclient.DTO.ClientDTO;
 import com.microservicios.serviceclient.Entities.Client;
-import org.hibernate.mapping.Array;
+import com.microservicios.serviceclient.Entities.ClientPK;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 @Service
 public class ClientDTOServiceImp implements ClientDTOService{
     @Override
     public ClientDTO clientToDTO(Client client) {
         ClientDTO clientDTO= ClientDTO.builder()
-                .number_id(client.getNumber_id())
-                .type_id(client.getType_id())
+                .number_id(client.getClientPk().getNumber_id())
+                .type_id(client.getClientPk().getType_id())
                 .name(client.getName())
                 .last_name(client.getLast_name())
                 .age(client.getAge())
@@ -26,9 +25,11 @@ public class ClientDTOServiceImp implements ClientDTOService{
 
     @Override
     public Client DTOToClient(ClientDTO clientDTO) {
-        Client client= Client.builder()
+        ClientPK clientPK= ClientPK.builder()
                 .number_id(clientDTO.getNumber_id())
-                .type_id(clientDTO.getType_id())
+                .type_id(clientDTO.getType_id()).build();
+        Client client= Client.builder()
+                .clientPk(clientPK)
                 .name(clientDTO.getName())
                 .last_name(clientDTO.getLast_name())
                 .age(clientDTO.getAge())

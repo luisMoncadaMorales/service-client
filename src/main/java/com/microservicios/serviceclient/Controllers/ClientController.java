@@ -24,10 +24,17 @@ public class ClientController {
     }
 
     @GetMapping(value = "clients")
-    public ResponseEntity<List<ClientDTO>>clients(@RequestParam(value = "age", defaultValue = "0") int age) {
-        List<ClientDTO> clients=service.clients(age);
-        if (clients.isEmpty())
+    public ResponseEntity<List<ClientDTO>>clients(@RequestParam(value = "age", defaultValue = "-1") int age) {
+        List<ClientDTO> clientsDTO=service.clients(age);
+        if (clientsDTO.isEmpty())
             return ResponseEntity.noContent().build();
-        return ResponseEntity.ok(clients);
+        return ResponseEntity.ok(clientsDTO);
+    }
+    @GetMapping(value = "clientById")
+    public ResponseEntity<ClientDTO>clientById(@RequestParam(value = "numberId") int numberId,@RequestParam(value = "typeId") String typeId) {
+        ClientDTO clientDTO=service.clientById(numberId,typeId);
+        if (clientDTO==null)
+            return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(clientDTO);
     }
 }

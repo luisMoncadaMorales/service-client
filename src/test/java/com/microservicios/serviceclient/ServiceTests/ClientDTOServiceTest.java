@@ -3,31 +3,26 @@ package com.microservicios.serviceclient.ServiceTests;
 import com.microservicios.serviceclient.DTO.ClientDTO;
 import com.microservicios.serviceclient.Entities.Client;
 import com.microservicios.serviceclient.Entities.ClientPK;
-import com.microservicios.serviceclient.Persistence.ClientRepository;
-import com.microservicios.serviceclient.Services.ClientDTOService;
 import com.microservicios.serviceclient.Services.ClientDTOServiceImp;
-import com.microservicios.serviceclient.Services.ClientServiceImp;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Arrays;
 import java.util.List;
+
 @SpringBootTest
-public class ClientServiceTest {
+public class ClientDTOServiceTest {
     @InjectMocks
-    private ClientServiceImp service;
+    private ClientDTOServiceImp service;
 
-    @Mock
-    private ClientRepository repository;
-
-    @Mock
-    private ClientDTOServiceImp clientDTOServiceImp;
+    private Client client;
+    private List<Client> clients;
+    private ClientDTO clientDTO;
+    private List<ClientDTO> clientsDto;
 
     @BeforeEach
     public void setup(){
@@ -35,14 +30,13 @@ public class ClientServiceTest {
         ClientPK clientPK= ClientPK.builder()
                 .number_id(1052)
                 .type_id("cc").build();
-        Client client=Client.builder()
-                .clientPk(clientPK)
+         client=Client.builder()
+                 .clientPk(clientPK)
                 .name("miguel")
                 .last_name("moncada")
                 .age(27)
                 .city("Envigado").build();
-        List<Client> clients = Arrays.asList(client);
-        ClientDTO clientDTO=ClientDTO.builder()
+        clientDTO=ClientDTO.builder()
                 .number_id(1052)
                 .type_id("cc")
                 .name("miguel")
@@ -50,13 +44,28 @@ public class ClientServiceTest {
                 .age(27)
                 .city("Envigado")
                 .photo("vacio").build();
-        List<ClientDTO> clientsDto = Arrays.asList(clientDTO);
-        Mockito.when(repository.clients(1)).thenReturn(clients);
-        Mockito.when(clientDTOServiceImp.listClientToDTO(clients)).thenReturn(clientsDto);
+        clientsDto = Arrays.asList(clientDTO);
+        clients = Arrays.asList(client);
+    }
+
+    @Test
+    public void  DTOToClientTest() {
+        Client clientResult=service.DTOToClient(this.clientDTO);
+        Assertions.assertThat(clientResult).isNotNull();
     }
     @Test
-    public void clientsTest(){
-        List<ClientDTO> clients=service.clients(1);
-        Assertions.assertThat(clients.size()).isEqualTo(1);
+    public void  clientToDTOTest() {
+        ClientDTO clientDTOResult=service.clientToDTO(this.client);
+        Assertions.assertThat(clientDTOResult).isNotNull();
+    }
+    @Test
+    public void  listClientToDTOTest() {
+        List<ClientDTO> clientDTOResult=service.listClientToDTO(this.clients);
+        Assertions.assertThat(clientDTOResult.size()).isEqualTo(1);
+    }
+    @Test
+    public void  listDTOToClientTest() {
+        List<Client> clientsResult=service.listDTOToClient(this.clientsDto);
+        Assertions.assertThat(clientsResult.size()).isEqualTo(1);
     }
 }
