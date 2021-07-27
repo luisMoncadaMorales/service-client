@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface ClientRepository extends JpaRepository<Client, ClientPK> {
+public interface ClientDAO extends JpaRepository<Client, ClientPK> {
     @Query(value = "SELECT * FROM clientes WHERE age> ?1 ",nativeQuery = true)
     List<Client> clients(@Param("age") int age);
 }

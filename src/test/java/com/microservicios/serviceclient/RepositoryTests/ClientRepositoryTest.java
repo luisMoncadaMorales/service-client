@@ -1,10 +1,11 @@
-package com.microservicios.serviceclient.ServiceTests;
+package com.microservicios.serviceclient.RepositoryTests;
 
 import com.microservicios.serviceclient.DTO.ClientDTO;
 import com.microservicios.serviceclient.Entities.Client;
 import com.microservicios.serviceclient.Entities.ClientPK;
-import com.microservicios.serviceclient.Repository.ClientRepository;
-import com.microservicios.serviceclient.Services.ClientServiceImp;
+import com.microservicios.serviceclient.Persistence.ClientDAO;
+import com.microservicios.serviceclient.Repository.ClientConvertImp;
+import com.microservicios.serviceclient.Repository.ClientRepositoryImp;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,21 +17,26 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import static org.mockito.Mockito.verify;
+
 @SpringBootTest
-public class ClientServiceTest {
+public class ClientRepositoryTest {
     @InjectMocks
-    private ClientServiceImp service;
+    private ClientRepositoryImp repository;
 
     @Mock
-    private ClientRepository repository;
+    private ClientRepositoryImp repositoryMock;
+    @Mock
+    private ClientDAO clientDAO;
+    @Mock
+    private ClientConvertImp clientConvertImp;
 
     private ClientPK clientPK;
     private Client client;
+    private List<Client> clients;
     private ClientDTO clientDTO;
     private List<ClientDTO> clientsDto;
-    private List<Client> clients;
-
-
 
     @BeforeEach
     public void setup(){
@@ -54,29 +60,31 @@ public class ClientServiceTest {
                 .city("Envigado")
                 .photo("vacio").build();
         clientsDto = Arrays.asList(clientDTO);
-        Mockito.when(repository.clients(1)).thenReturn(clientsDto);
-        Mockito.when(repository.clientById(1052,"cc")).thenReturn(clientDTO);
-        Mockito.when(repository.saveClient(clientDTO)).thenReturn(clientDTO);
-        Mockito.when(repository.deleteClient(1052,"cc")).thenReturn(true);
+        Mockito.when(clientDAO.clients(1)).thenReturn(clients);
+        Mockito.when(clientDAO.findById(clientPK)).thenReturn(Optional.ofNullable(client));
+        Mockito.when(clientDAO.save(client)).thenReturn(client);
+        Mockito.when(clientConvertImp.listClientToDTO(clients)).thenReturn(clientsDto);
+        Mockito.when(clientConvertImp.clientToDTO(client)).thenReturn(clientDTO);
+        Mockito.when(clientConvertImp.DTOToClient(clientDTO)).thenReturn(client);
     }
     @Test
     public void clientsTest(){
-        List<ClientDTO> clientsResult=service.clients(1);
+        List<ClientDTO> clientsResult=repository.clients(1);
         Assertions.assertThat(clientsResult.size()).isEqualTo(1);
     }
     @Test
     public void clientByIdTest() {
-        ClientDTO clientDTOResult= service.clientById(1052,"cc");
+        ClientDTO clientDTOResult= repository.clientById(1052,"cc");
         Assertions.assertThat(clientDTOResult).isNotNull();
     }
     @Test
     public void saveClientTest() {
-        ClientDTO clientDTOResult= service.saveClient(this.clientDTO);
+        ClientDTO clientDTOResult=repository.saveClient(clientDTO);
         Assertions.assertThat(clientDTOResult).isNotNull();
     }
     @Test
     public void deleteClientTest() {
-        boolean result=service.deleteClient(1052,"cc");
-        Assertions.assertThat(result).isTrue();
+        repositoryMock.deleteClient(1054,"cc");
+        verify( repositoryMock ).deleteClient( 1054,"cc" );
     }
 }

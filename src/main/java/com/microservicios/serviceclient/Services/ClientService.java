@@ -9,4 +9,6 @@ import java.util.Optional;
 public interface ClientService {
     List<ClientDTO> clients(int age);
     ClientDTO clientById(int numberId, String type_id);
+    ClientDTO saveClient(ClientDTO clientDTO);
+    boolean deleteClient(int numberId,String typeId);
 }

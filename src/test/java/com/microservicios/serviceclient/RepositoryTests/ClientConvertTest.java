@@ -1,9 +1,9 @@
-package com.microservicios.serviceclient.ServiceTests;
+package com.microservicios.serviceclient.RepositoryTests;
 
 import com.microservicios.serviceclient.DTO.ClientDTO;
 import com.microservicios.serviceclient.Entities.Client;
 import com.microservicios.serviceclient.Entities.ClientPK;
-import com.microservicios.serviceclient.Services.ClientDTOServiceImp;
+import com.microservicios.serviceclient.Repository.ClientConvertImp;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,9 +15,9 @@ import java.util.Arrays;
 import java.util.List;
 
 @SpringBootTest
-public class ClientDTOServiceTest {
+public class ClientConvertTest {
     @InjectMocks
-    private ClientDTOServiceImp service;
+    private ClientConvertImp service;
 
     private Client client;
     private List<Client> clients;

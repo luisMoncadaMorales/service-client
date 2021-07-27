@@ -1,14 +1,15 @@
-package com.microservicios.serviceclient.Services;
+package com.microservicios.serviceclient.Repository;
 
 import com.microservicios.serviceclient.DTO.ClientDTO;
 import com.microservicios.serviceclient.Entities.Client;
 import com.microservicios.serviceclient.Entities.ClientPK;
+import com.microservicios.serviceclient.Repository.ClientConvert;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 @Service
-public class ClientDTOServiceImp implements ClientDTOService{
+public class ClientConvertImp implements ClientConvert {
     @Override
     public ClientDTO clientToDTO(Client client) {
         ClientDTO clientDTO= ClientDTO.builder()

@@ -2,7 +2,7 @@ package com.microservicios.serviceclient.PersistenceTests;
 
 import com.microservicios.serviceclient.Entities.Client;
 import com.microservicios.serviceclient.Entities.ClientPK;
-import com.microservicios.serviceclient.Persistence.ClientRepository;
+import com.microservicios.serviceclient.Persistence.ClientDAO;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,9 +16,9 @@ import java.util.*;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class ClientRepositoryTest {
+public class ClientDAOTest {
     @Mock
-    private ClientRepository repository;
+    private ClientDAO repository;
 
     @BeforeEach
     public void setup(){
