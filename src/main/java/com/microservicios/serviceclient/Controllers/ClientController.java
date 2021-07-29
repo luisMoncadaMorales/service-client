@@ -51,7 +51,7 @@ public class ClientController {
             return ResponseEntity.ok(clientDTOResult);
         }
     }
-    @GetMapping(value = "deleteClient")
+    @DeleteMapping(value = "deleteClient")
     public ResponseEntity<String>deleteClient(@RequestParam(value = "numberId",required = true) int numberId, @RequestParam(value = "typeId",required = true) String typeId) {
         boolean result=service.deleteClient(numberId,typeId);
         if (!result)
