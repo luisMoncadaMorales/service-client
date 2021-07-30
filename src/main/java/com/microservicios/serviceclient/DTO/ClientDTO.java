@@ -31,7 +31,7 @@ public class ClientDTO {
 
     @NotEmpty(message = "the city field cannot be empty")
     private String city;
-
+    @NotEmpty(message = "the photo field cannot be empty")
     private String photo;
 
 }
