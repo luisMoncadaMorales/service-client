@@ -3,7 +3,6 @@ package com.microservicios.serviceclient.Feign;
 import com.microservicios.serviceclient.DTO.PhotoDTO;
 import com.microservicios.serviceclient.Entities.ClientPK;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
