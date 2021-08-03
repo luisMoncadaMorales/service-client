@@ -23,7 +23,7 @@ public class ErrorServiceTest {
         bindingResult.addError(new ObjectError(paramName, "Payload value must not be empty"));
     }
     @Test
-    public void formatMessage() {
+    public void formatMessageTest() {
         String result=service.formatMessage(bindingResult);
         Assertions.assertThat(result).isEqualTo("{\"statusCode\":\"01\",\"messages\":[]}");
     }
