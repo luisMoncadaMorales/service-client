@@ -18,7 +18,7 @@ public class ClientServiceImp implements ClientService{
     @Autowired
     ClientRepository repository;
     @Autowired
-    PhotoConvertService servicePhotoConvertService;
+    PhotoConvertService photoConvertService;
     @Autowired
     PhotoFeign photoFeign;
     @Override
@@ -26,28 +26,34 @@ public class ClientServiceImp implements ClientService{
         List<ClientDTO> clientsDTO=repository.clients(age);
         List<ClientPK> clientPKS=this.getPks(clientsDTO);
         List<PhotoDTO> photosDTO=photoFeign.photosById(clientPKS).getBody();
-        return servicePhotoConvertService.photosToClients(clientsDTO,photosDTO);
+        return photoConvertService.photosToClients(clientsDTO,photosDTO);
     }
 
     @Override
     public ClientDTO clientById(int numberId, String typeId) {
         PhotoDTO photoDTO=photoFeign.photoById(numberId,typeId).getBody();
         ClientDTO clientDTO=repository.clientById(numberId,typeId);
-        return servicePhotoConvertService.photoToClient(clientDTO,photoDTO);
+        return photoConvertService.photoToClient(clientDTO,photoDTO);
     }
 
     @Override
     public ClientDTO saveClient(ClientDTO clientDTO) {
-        PhotoDTO photoDTO= servicePhotoConvertService.clientToPhoto(clientDTO);
+        PhotoDTO photoDTO= photoConvertService.clientToPhoto(clientDTO);
         PhotoDTO photoResult=photoFeign.savePhoto(photoDTO).getBody();
-        ClientDTO clientDTOResult=repository.saveClient(clientDTO);
-        return servicePhotoConvertService.photoToClient(clientDTOResult,photoResult);
+        if(photoResult!=null){
+            ClientDTO clientDTOResult=repository.saveClient(clientDTO);
+            return photoConvertService.photoToClient(clientDTOResult,photoResult);
+        }
+        return null;
     }
 
     @Override
     public boolean deleteClient(int numberId, String typeId) {
         String result=photoFeign.deleteById(numberId,typeId).getBody();
-        return repository.deleteClient(numberId,typeId);
+        if(result.equals("removed")){
+            return repository.deleteClient(numberId,typeId);
+        }
+        return false;
     }
 
     public List<ClientPK> getPks(List<ClientDTO> clientDTOS){

@@ -47,7 +47,7 @@ public class ClientController {
         }else {
             ClientDTO clientDTOResult=service.saveClient(clientDTO);
             if (clientDTOResult==null)
-                return ResponseEntity.unprocessableEntity().build();
+                return ResponseEntity.internalServerError().build();
             return ResponseEntity.ok(clientDTOResult);
         }
     }
