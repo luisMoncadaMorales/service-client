@@ -3,6 +3,6 @@ spring:
     name: service-client
   cloud:
     config:
-      uri: http://root:s3cr3t@localhost:8082
+      uri: http://localhost:8082
       username: root
       password: s3cr3t

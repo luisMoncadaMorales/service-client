@@ -14,7 +14,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "api")
+@RequestMapping(value = "apiClient")
 public class ClientController {
 
     private ClientService service;

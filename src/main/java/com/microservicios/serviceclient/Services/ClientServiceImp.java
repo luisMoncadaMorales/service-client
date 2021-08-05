@@ -50,10 +50,10 @@ public class ClientServiceImp implements ClientService{
     @Override
     public boolean deleteClient(int numberId, String typeId) {
         String result=photoFeign.deleteById(numberId,typeId).getBody();
-        if(result.equals("removed")){
-            return repository.deleteClient(numberId,typeId);
+        if(result==null || !result.equals("removed")){
+            return false;
         }
-        return false;
+        return repository.deleteClient(numberId,typeId);
     }
 
     public List<ClientPK> getPks(List<ClientDTO> clientDTOS){

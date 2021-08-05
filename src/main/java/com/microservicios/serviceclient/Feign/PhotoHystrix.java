@@ -27,6 +27,6 @@ public class PhotoHystrix implements PhotoFeign{
 
     @Override
     public ResponseEntity<String> deleteById(int id, String typeId) {
-        return ResponseEntity.ok("not found");
+        return ResponseEntity.ok("errorConection");
     }
 }
