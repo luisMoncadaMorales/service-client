@@ -8,7 +8,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(name = "ServicePhotoApplication",url = "http://localhost:8081/apiPhoto",fallback = PhotoHystrix.class)
+//@FeignClient(name = "ServicePhotoApplication",url = "http://localhost:8081/apiPhoto",fallback = PhotoHystrix.class)
+@FeignClient(name = "service-photo", path = "/apiPhoto",fallback = PhotoHystrix.class)
 public interface PhotoFeign {
     @PostMapping(value = "savePhoto")
     public ResponseEntity<PhotoDTO> savePhoto(@RequestBody PhotoDTO photo);
