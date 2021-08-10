@@ -3,7 +3,6 @@ package com.microservicios.serviceclient.Repository;
 import com.microservicios.serviceclient.DTO.ClientDTO;
 import com.microservicios.serviceclient.Entities.Client;
 import com.microservicios.serviceclient.Entities.ClientPK;
-import com.microservicios.serviceclient.Repository.ClientConvert;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,7 +18,7 @@ public class ClientConvertImp implements ClientConvert {
                 .last_name(client.getLast_name())
                 .age(client.getAge())
                 .city(client.getCity())
-                .photo("vacio")
+                .photo(client.getId_photo())
                 .build();
         return clientDTO;
     }
@@ -35,6 +34,7 @@ public class ClientConvertImp implements ClientConvert {
                 .last_name(clientDTO.getLast_name())
                 .age(clientDTO.getAge())
                 .city(clientDTO.getCity())
+                .id_photo(clientDTO.getPhoto())
                 .build();
         return client;
     }

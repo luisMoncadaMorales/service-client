@@ -15,18 +15,18 @@ public class PhotoHystrix implements PhotoFeign{
     }
 
     @Override
-    public ResponseEntity<List<PhotoDTO>> photosById(List<ClientPK> clientsDTO) {
+    public ResponseEntity<List<PhotoDTO>> photosById(List<String> clientsDTO) {
         List<PhotoDTO> result=new ArrayList<PhotoDTO>();
         return ResponseEntity.ok(result);
     }
 
     @Override
-    public ResponseEntity<PhotoDTO> photoById(int id, String typeId) {
+    public ResponseEntity<PhotoDTO> photoById(String id) {
         return ResponseEntity.ok(null);
     }
 
     @Override
-    public ResponseEntity<String> deleteById(int id, String typeId) {
+    public ResponseEntity<String> deleteById(String id) {
         return ResponseEntity.ok("errorConection");
     }
 }

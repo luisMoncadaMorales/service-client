@@ -15,16 +15,26 @@ public class Client implements Serializable {
     private String last_name;
     private int age;
     private String city;
+    private String id_photo;
 
     public Client() {
     }
 
-    public Client(ClientPK clientPk, String name, String last_name, int age, String city) {
+    public String getId_photo() {
+        return id_photo;
+    }
+
+    public void setId_photo(String id_photo) {
+        this.id_photo = id_photo;
+    }
+
+    public Client(ClientPK clientPk, String name, String last_name, int age, String city, String id_photo) {
         this.clientPk = clientPk;
         this.name = name;
         this.last_name = last_name;
         this.age = age;
         this.city = city;
+        this.id_photo = id_photo;
     }
 
     public ClientPK getClientPk() {

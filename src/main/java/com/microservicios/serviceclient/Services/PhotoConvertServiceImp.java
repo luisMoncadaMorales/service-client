@@ -10,20 +10,31 @@ import java.util.List;
 @Service
 public class PhotoConvertServiceImp implements PhotoConvertService {
     @Override
-    public PhotoDTO clientToPhoto(ClientDTO clientDTO) {
-        PhotoDTO photoDTO=PhotoDTO.builder()
-                .number_id(clientDTO.getNumber_id())
-                .type_id(clientDTO.getType_id())
+    public PhotoDTO clientToPhoto(ClientDTO clientDTO,String idPhoto) {
+        PhotoDTO photoDTO=null;
+        String id=null;
+        if(idPhoto!=null){
+            id=idPhoto;
+        }
+        photoDTO=PhotoDTO.builder()
+                .id(id)
                 .image(clientDTO.getPhoto())
                 .build();
         return photoDTO;
     }
 
     @Override
-    public ClientDTO photoToClient(ClientDTO clientDTO, PhotoDTO photoDTO) {
-        if (photoDTO!=null){
-            clientDTO.setPhoto(photoDTO.getImage());
+    public ClientDTO photoToClient(ClientDTO clientDTO, PhotoDTO photoDTO,boolean save) {
+        if(save){
+            if (photoDTO!=null){
+                clientDTO.setPhoto(photoDTO.getId());
+            }
+        }else{
+            if (photoDTO!=null){
+                clientDTO.setPhoto(photoDTO.getImage());
+            }
         }
+
         return clientDTO;
     }
 
@@ -32,12 +43,14 @@ public class PhotoConvertServiceImp implements PhotoConvertService {
         List<ClientDTO> clientsDTOResult=new ArrayList<>();
         for (ClientDTO clientDTO:clientsDTO) {
             String image=photosDTO.stream()
-                    .filter(photo -> photo.getNumber_id()==clientDTO.getNumber_id() && photo.getType_id().equals(clientDTO.getType_id()))
+                    .filter(photo -> photo.getId().toString().equals(clientDTO.getPhoto()))
                     .map(photo-> photo.getImage())
                     .findFirst()
                     .orElse(null);
            if(image!=null){
                clientDTO.setPhoto(image);
+           }else{
+               clientDTO.setPhoto(null);
            }
            clientsDTOResult.add(clientDTO);
         }

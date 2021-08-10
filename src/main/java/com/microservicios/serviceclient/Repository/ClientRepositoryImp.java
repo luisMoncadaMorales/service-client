@@ -58,5 +58,10 @@ public class ClientRepositoryImp implements ClientRepository{
         }
     }
 
+    @Override
+    public String getIdPhoto(int numberId, String typeId) {
+        return clientDAO.getIdPhoto(numberId,typeId);
+    }
+
 
 }

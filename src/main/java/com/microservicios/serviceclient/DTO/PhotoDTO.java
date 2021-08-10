@@ -8,7 +8,6 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class PhotoDTO {
-    private int number_id;
-    private String type_id;
+    private String id;
     private String image;
 }

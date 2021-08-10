@@ -2,14 +2,12 @@ package com.microservicios.serviceclient.Services;
 
 import com.microservicios.serviceclient.DTO.ClientDTO;
 import com.microservicios.serviceclient.DTO.PhotoDTO;
-import com.microservicios.serviceclient.Entities.ClientPK;
 import com.microservicios.serviceclient.Feign.PhotoFeign;
 import com.microservicios.serviceclient.Repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -24,46 +22,59 @@ public class ClientServiceImp implements ClientService{
     @Override
     public List<ClientDTO> clients(int age) {
         List<ClientDTO> clientsDTO=repository.clients(age);
-        List<ClientPK> clientPKS=this.getPks(clientsDTO);
+        List<String> clientPKS=this.getPks(clientsDTO);
         List<PhotoDTO> photosDTO=photoFeign.photosById(clientPKS).getBody();
         return photoConvertService.photosToClients(clientsDTO,photosDTO);
     }
 
     @Override
     public ClientDTO clientById(int numberId, String typeId) {
-        PhotoDTO photoDTO=photoFeign.photoById(numberId,typeId).getBody();
         ClientDTO clientDTO=repository.clientById(numberId,typeId);
-        return photoConvertService.photoToClient(clientDTO,photoDTO);
+        if(clientDTO!=null){
+            if(clientDTO.getPhoto()!=null){
+                PhotoDTO photoDTO=photoFeign.photoById(clientDTO.getPhoto()).getBody();
+                return photoConvertService.photoToClient(clientDTO,photoDTO,false);
+            }
+            return clientDTO;
+        }
+        return null;
     }
 
     @Override
     public ClientDTO saveClient(ClientDTO clientDTO) {
-        PhotoDTO photoDTO= photoConvertService.clientToPhoto(clientDTO);
+        String idPhoto=repository.getIdPhoto(clientDTO.getNumber_id(),clientDTO.getType_id());
+        PhotoDTO photoDTO= photoConvertService.clientToPhoto(clientDTO,idPhoto);
         PhotoDTO photoResult=photoFeign.savePhoto(photoDTO).getBody();
         if(photoResult!=null){
+           clientDTO=photoConvertService.photoToClient(clientDTO,photoResult,true);
             ClientDTO clientDTOResult=repository.saveClient(clientDTO);
-            return photoConvertService.photoToClient(clientDTOResult,photoResult);
+            return photoConvertService.photoToClient(clientDTOResult,photoResult,false);
         }
         return null;
     }
 
     @Override
     public boolean deleteClient(int numberId, String typeId) {
-        String result=photoFeign.deleteById(numberId,typeId).getBody();
-        if(result==null || !result.equals("removed")){
-            return false;
+        ClientDTO clientDTO=repository.clientById(numberId,typeId);
+        if(clientDTO!=null){
+            String idPhoto=clientDTO.getPhoto();
+            String result=null;
+            if(idPhoto!=null){
+                result=photoFeign.deleteById(idPhoto).getBody();
+            }
+            if(result==null || !result.equals("removed")){
+                return false;
+            }
+            return repository.deleteClient(numberId,typeId);
         }
-        return repository.deleteClient(numberId,typeId);
+        return false;
+
     }
 
-    public List<ClientPK> getPks(List<ClientDTO> clientDTOS){
-        List<ClientPK> clientPKS=new ArrayList<>();
+    public List<String> getPks(List<ClientDTO> clientDTOS){
+        List<String> clientPKS=new ArrayList<>();
         for (ClientDTO clientDTO:clientDTOS) {
-            ClientPK clientPK=ClientPK.builder()
-                    .number_id(clientDTO.getNumber_id())
-                    .type_id(clientDTO.getType_id())
-                    .build();
-            clientPKS.add(clientPK);
+            clientPKS.add(clientDTO.getPhoto());
         }
         return  clientPKS;
     }

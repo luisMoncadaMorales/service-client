@@ -9,4 +9,5 @@ public interface ClientRepository {
     ClientDTO clientById(int numberId, String typeId);
     ClientDTO saveClient(ClientDTO clientDTO);
     boolean deleteClient(int numberId,String typeId);
+    String getIdPhoto(int numberId,String typeId);
 }

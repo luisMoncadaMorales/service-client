@@ -14,10 +14,10 @@ public interface PhotoFeign {
     @PostMapping(value = "savePhoto")
     public ResponseEntity<PhotoDTO> savePhoto(@RequestBody PhotoDTO photo);
     @PostMapping(value = "photosById")
-    public ResponseEntity<List<PhotoDTO>> photosById(@RequestBody List<ClientPK> clientsDTO);
+    public ResponseEntity<List<PhotoDTO>> photosById(@RequestBody List<String> clientsDTO);
     @GetMapping(value = "photoById")
-    public ResponseEntity<PhotoDTO> photoById(@RequestParam(value = "id") int id, @RequestParam(value = "typeId") String typeId);
+    public ResponseEntity<PhotoDTO> photoById(@RequestParam(value = "id") String id);
     @DeleteMapping(value = "deleteById")
-    public ResponseEntity<String> deleteById(@RequestParam(value = "id") int id,@RequestParam(value = "typeId") String typeId);
+    public ResponseEntity<String> deleteById(@RequestParam(value = "id") String id);
 
 }
