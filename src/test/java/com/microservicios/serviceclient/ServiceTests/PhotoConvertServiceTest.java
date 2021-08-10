@@ -27,8 +27,7 @@ public class PhotoConvertServiceTest {
     public void setup(){
         MockitoAnnotations.openMocks(this);
         photoDTO=PhotoDTO.builder()
-                .number_id(1052)
-                .type_id("cc")
+                .id("6111dbaa95514d59d84fd212")
                 .image("photo1052")
                 .build();
         clientDTO=ClientDTO.builder()
@@ -38,19 +37,24 @@ public class PhotoConvertServiceTest {
                 .last_name("moncada")
                 .age(27)
                 .city("Envigado")
-                .photo("vacio").build();
+                .photo("6111dbaa95514d59d84fd212").build();
         clientsDto = Arrays.asList(clientDTO);
         photosDTO = Arrays.asList(photoDTO);
     }
     @Test
     public void clientToPhotoTest() {
-        PhotoDTO photoDTOResult=service.clientToPhoto(this.clientDTO);
-        Assertions.assertThat(photoDTOResult.getNumber_id()).isEqualTo(this.clientDTO.getNumber_id());
+        PhotoDTO photoDTOResult=service.clientToPhoto(this.clientDTO,"6111dbaa95514d59d84fd212");
+        Assertions.assertThat(photoDTOResult.getId()).isEqualTo("6111dbaa95514d59d84fd212");
     }
     @Test
-    public void photoToClientTest() {
-        ClientDTO result=service.photoToClient(this.clientDTO,this.photoDTO);
-        Assertions.assertThat(result.getPhoto()).isEqualTo(this.photoDTO.getImage());
+    public void photoToClientTrueTest() {
+        ClientDTO result=service.photoToClient(this.clientDTO,this.photoDTO,true);
+        Assertions.assertThat(result.getPhoto()).isEqualTo("6111dbaa95514d59d84fd212");
+    }
+    @Test
+    public void photoToClientFalseTest() {
+        ClientDTO result=service.photoToClient(this.clientDTO,this.photoDTO,false);
+        Assertions.assertThat(result.getPhoto()).isEqualTo("photo1052");
     }
     @Test
     public void photosToClientsTest() {
