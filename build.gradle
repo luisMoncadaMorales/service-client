@@ -2,6 +2,8 @@ plugins {
 	id 'org.springframework.boot' version '2.5.2'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
+	id "org.sonarqube" version "3.0"
+	id 'jacoco'
 }
 
 group = 'com.microservicios'
@@ -50,3 +52,4 @@ dependencyManagement {
 test {
 	useJUnitPlatform()
 }
+tasks['sonarqube'].dependsOn test
