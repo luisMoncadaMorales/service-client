@@ -18,15 +18,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import static org.mockito.Mockito.verify;
 
 @SpringBootTest
 public class ClientRepositoryTest {
     @InjectMocks
     private ClientRepositoryImp repository;
 
-    @Mock
-    private ClientRepositoryImp repositoryMock;
     @Mock
     private ClientDAO clientDAO;
     @Mock
@@ -63,6 +60,7 @@ public class ClientRepositoryTest {
         Mockito.when(clientDAO.clients(1)).thenReturn(clients);
         Mockito.when(clientDAO.findById(clientPK)).thenReturn(Optional.ofNullable(client));
         Mockito.when(clientDAO.save(client)).thenReturn(client);
+        Mockito.when(clientDAO.getIdPhoto(1052,"cc")).thenReturn("6111dbaa95514d59d84fd212");
         Mockito.when(clientConvertImp.listClientToDTO(clients)).thenReturn(clientsDto);
         Mockito.when(clientConvertImp.clientToDTO(client)).thenReturn(clientDTO);
         Mockito.when(clientConvertImp.DTOToClient(clientDTO)).thenReturn(client);
@@ -84,7 +82,12 @@ public class ClientRepositoryTest {
     }
     @Test
     public void deleteClientTest() {
-        repositoryMock.deleteClient(1054,"cc");
-        verify( repositoryMock ).deleteClient( 1054,"cc" );
+       boolean result= repository.deleteClient(1051,"cc");
+        Assertions.assertThat(result).isEqualTo(true);
+    }
+    @Test
+    public void getIdPhotoTest() {
+        String result= repository.getIdPhoto(1052,"cc");
+        Assertions.assertThat(result).isEqualTo("6111dbaa95514d59d84fd212");
     }
 }

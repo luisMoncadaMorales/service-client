@@ -1,7 +1,6 @@
 package com.microservicios.serviceclient.Feign;
 
 import com.microservicios.serviceclient.DTO.PhotoDTO;
-import com.microservicios.serviceclient.Entities.ClientPK;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 

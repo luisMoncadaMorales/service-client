@@ -32,6 +32,8 @@ public class PhotoConvertServiceImp implements PhotoConvertService {
         }else{
             if (photoDTO!=null){
                 clientDTO.setPhoto(photoDTO.getImage());
+            }else{
+                clientDTO.setPhoto(null);
             }
         }
 
