@@ -1,6 +1,7 @@
 package com.microservicios.serviceclient.Services;
 
 import com.microservicios.serviceclient.DTO.ClientDTO;
+import com.microservicios.serviceclient.DTO.ClientRepositoryDTO;
 import com.microservicios.serviceclient.DTO.PhotoDTO;
 import com.microservicios.serviceclient.Feign.PhotoFeign;
 import com.microservicios.serviceclient.Repository.ClientRepository;
@@ -16,26 +17,25 @@ public class ClientServiceImp implements ClientService{
     @Autowired
     ClientRepository repository;
     @Autowired
-    PhotoConvertService photoConvertService;
+    ClientConvertService clientConvertService;
     @Autowired
     PhotoFeign photoFeign;
+    @Autowired
+    PhotoConvertService photoConvertService;
     @Override
     public List<ClientDTO> clients(int age) {
-        List<ClientDTO> clientsDTO=repository.clients(age);
-        List<String> clientPKS=this.getPks(clientsDTO);
+        List<ClientRepositoryDTO> clientsRepositoryDTO=repository.clients(age);
+        List<String> clientPKS=this.getPks(clientsRepositoryDTO);
         List<PhotoDTO> photosDTO=photoFeign.photosById(clientPKS).getBody();
-        return photoConvertService.photosToClients(clientsDTO,photosDTO);
+        return clientConvertService.toClientsDTO(clientsRepositoryDTO,photosDTO);
     }
 
     @Override
     public ClientDTO clientById(int numberId, String typeId) {
-        ClientDTO clientDTO=repository.clientById(numberId,typeId);
-        if(clientDTO!=null){
-            if(clientDTO.getPhoto()!=null){
-                PhotoDTO photoDTO=photoFeign.photoById(clientDTO.getPhoto()).getBody();
-                return photoConvertService.photoToClient(clientDTO,photoDTO,false);
-            }
-            return clientDTO;
+        ClientRepositoryDTO clientRepositoryDTO=repository.clientById(numberId,typeId);
+        if(clientRepositoryDTO!=null){
+            PhotoDTO photoDTO=photoFeign.photoById(clientRepositoryDTO.getId_photo()).getBody();
+            return clientConvertService.toClientDTO(clientRepositoryDTO,photoDTO);
         }
         return null;
     }
@@ -46,18 +46,18 @@ public class ClientServiceImp implements ClientService{
         PhotoDTO photoDTO= photoConvertService.clientToPhoto(clientDTO,idPhoto);
         PhotoDTO photoResult=photoFeign.savePhoto(photoDTO).getBody();
         if(photoResult!=null){
-           clientDTO=photoConvertService.photoToClient(clientDTO,photoResult,true);
-            ClientDTO clientDTOResult=repository.saveClient(clientDTO);
-            return photoConvertService.photoToClient(clientDTOResult,photoResult,false);
+            ClientRepositoryDTO clientRepositoryDTO= clientConvertService.toClientRepositoryDTO(clientDTO,photoResult);
+            repository.saveClient(clientRepositoryDTO);
+            return clientDTO;
         }
         return null;
     }
 
     @Override
     public boolean deleteClient(int numberId, String typeId) {
-        ClientDTO clientDTO=repository.clientById(numberId,typeId);
-        if(clientDTO!=null){
-            String idPhoto=clientDTO.getPhoto();
+        ClientRepositoryDTO clientRepositoryDTO=repository.clientById(numberId,typeId);
+        if(clientRepositoryDTO!=null){
+            String idPhoto=clientRepositoryDTO.getId_photo();
             String result=null;
             if(idPhoto!=null){
                 result=photoFeign.deleteById(idPhoto).getBody();
@@ -71,10 +71,10 @@ public class ClientServiceImp implements ClientService{
 
     }
 
-    public List<String> getPks(List<ClientDTO> clientDTOS){
+    public List<String> getPks(List<ClientRepositoryDTO> clientsRepositoryDTO){
         List<String> clientPKS=new ArrayList<>();
-        for (ClientDTO clientDTO:clientDTOS) {
-            clientPKS.add(clientDTO.getPhoto());
+        for (ClientRepositoryDTO clientRepositoryDTO:clientsRepositoryDTO) {
+            clientPKS.add(clientRepositoryDTO.getId_photo());
         }
         return  clientPKS;
     }

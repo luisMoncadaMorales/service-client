@@ -2,7 +2,6 @@ package com.microservicios.serviceclient.DTO;
 
 import lombok.*;
 
-
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Positive;
 
@@ -11,9 +10,7 @@ import javax.validation.constraints.Positive;
 @Builder
 @Getter
 @Setter
-public class ClientDTO {
-
-
+public class ClientRepositoryDTO {
     @Positive(message = "the number_id must be greater than 0")
     private int number_id;
 
@@ -33,7 +30,5 @@ public class ClientDTO {
     private String city;
 
     @NotEmpty(message = "the photo field cannot be empty")
-    private String photo;
-
-
+    private String id_photo;
 }

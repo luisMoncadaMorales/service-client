@@ -1,6 +1,7 @@
 package com.microservicios.serviceclient.Repository;
 
 import com.microservicios.serviceclient.DTO.ClientDTO;
+import com.microservicios.serviceclient.DTO.ClientRepositoryDTO;
 import com.microservicios.serviceclient.Entities.Client;
 import com.microservicios.serviceclient.Entities.ClientPK;
 import com.microservicios.serviceclient.Persistence.ClientDAO;
@@ -17,13 +18,13 @@ public class ClientRepositoryImp implements ClientRepository{
     @Autowired
     ClientConvert clientConvert;
     @Override
-    public List<ClientDTO> clients(int age) {
+    public List<ClientRepositoryDTO> clients(int age) {
         List<Client> clients=clientDAO.clients(age);
         return clientConvert.listClientToDTO(clients);
     }
 
     @Override
-    public ClientDTO clientById(int numberId, String typeId) {
+    public ClientRepositoryDTO clientById(int numberId, String typeId) {
         ClientPK clientPK= ClientPK.builder()
                 .number_id(numberId)
                 .type_id(typeId).build();
@@ -35,8 +36,8 @@ public class ClientRepositoryImp implements ClientRepository{
     }
 
     @Override
-    public ClientDTO saveClient(ClientDTO clientDTO) {
-        Client client=clientConvert.DTOToClient(clientDTO);
+    public ClientRepositoryDTO saveClient(ClientRepositoryDTO clientRepositoryDTO) {
+        Client client=clientConvert.DTOToClient(clientRepositoryDTO);
         try {
             Client clientResult= clientDAO.save(client);
             return clientConvert.clientToDTO(clientResult);

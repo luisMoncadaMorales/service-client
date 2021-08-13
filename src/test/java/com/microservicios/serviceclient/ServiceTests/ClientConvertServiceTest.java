@@ -2,7 +2,7 @@ package com.microservicios.serviceclient.ServiceTests;
 
 import com.microservicios.serviceclient.DTO.ClientDTO;
 import com.microservicios.serviceclient.DTO.PhotoDTO;
-import com.microservicios.serviceclient.Services.PhotoConvertServiceImp;
+import com.microservicios.serviceclient.Services.ClientConvertServiceImp;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,10 +14,10 @@ import java.util.Arrays;
 import java.util.List;
 
 @SpringBootTest
-public class PhotoConvertServiceTest {
+public class ClientConvertServiceTest {
 
     @InjectMocks
-    private PhotoConvertServiceImp service;
+    private ClientConvertServiceImp service;
 
     private PhotoDTO photoDTO;
     private ClientDTO clientDTO;
