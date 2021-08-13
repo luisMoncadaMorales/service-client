@@ -1,6 +1,7 @@
 package com.microservicios.serviceclient.RepositoryTests;
 
 import com.microservicios.serviceclient.DTO.ClientDTO;
+import com.microservicios.serviceclient.DTO.ClientRepositoryDTO;
 import com.microservicios.serviceclient.Entities.Client;
 import com.microservicios.serviceclient.Entities.ClientPK;
 import com.microservicios.serviceclient.Persistence.ClientDAO;
@@ -32,8 +33,8 @@ public class ClientRepositoryTest {
     private ClientPK clientPK;
     private Client client;
     private List<Client> clients;
-    private ClientDTO clientDTO;
-    private List<ClientDTO> clientsDto;
+    private ClientRepositoryDTO clientRepositoryDTO;
+    private List<ClientRepositoryDTO> clientsRepositoryDTO;
 
     @BeforeEach
     public void setup(){
@@ -48,37 +49,37 @@ public class ClientRepositoryTest {
                 .age(27)
                 .city("Envigado").build();
         clients = Arrays.asList(client);
-        clientDTO=ClientDTO.builder()
+        clientRepositoryDTO=ClientRepositoryDTO.builder()
                 .number_id(1052)
                 .type_id("cc")
                 .name("miguel")
                 .last_name("moncada")
                 .age(27)
                 .city("Envigado")
-                .photo("vacio").build();
-        clientsDto = Arrays.asList(clientDTO);
+                .id_photo("6111dbaa95514d59d84fd212").build();
+        clientsRepositoryDTO = Arrays.asList(clientRepositoryDTO);
         Mockito.when(clientDAO.clients(1)).thenReturn(clients);
         Mockito.when(clientDAO.findById(clientPK)).thenReturn(Optional.ofNullable(client));
         Mockito.when(clientDAO.save(client)).thenReturn(client);
         Mockito.when(clientDAO.getIdPhoto(1052,"cc")).thenReturn("6111dbaa95514d59d84fd212");
-        Mockito.when(clientConvertImp.listClientToDTO(clients)).thenReturn(clientsDto);
-        Mockito.when(clientConvertImp.clientToDTO(client)).thenReturn(clientDTO);
-        Mockito.when(clientConvertImp.DTOToClient(clientDTO)).thenReturn(client);
+        Mockito.when(clientConvertImp.listClientToDTO(clients)).thenReturn(clientsRepositoryDTO);
+        Mockito.when(clientConvertImp.clientToDTO(client)).thenReturn(clientRepositoryDTO);
+        Mockito.when(clientConvertImp.DTOToClient(clientRepositoryDTO)).thenReturn(client);
     }
     @Test
     public void clientsTest(){
-        List<ClientDTO> clientsResult=repository.clients(1);
+        List<ClientRepositoryDTO> clientsResult=repository.clients(1);
         Assertions.assertThat(clientsResult.size()).isEqualTo(1);
     }
     @Test
     public void clientByIdTest() {
-        ClientDTO clientDTOResult= repository.clientById(1052,"cc");
-        Assertions.assertThat(clientDTOResult).isNotNull();
+        ClientRepositoryDTO result= repository.clientById(1052,"cc");
+        Assertions.assertThat(result).isNotNull();
     }
     @Test
     public void saveClientTest() {
-        ClientDTO clientDTOResult=repository.saveClient(clientDTO);
-        Assertions.assertThat(clientDTOResult).isNotNull();
+        ClientRepositoryDTO result=repository.saveClient(clientRepositoryDTO);
+        Assertions.assertThat(result).isNotNull();
     }
     @Test
     public void deleteClientTest() {

@@ -1,6 +1,7 @@
 package com.microservicios.serviceclient.RepositoryTests;
 
 import com.microservicios.serviceclient.DTO.ClientDTO;
+import com.microservicios.serviceclient.DTO.ClientRepositoryDTO;
 import com.microservicios.serviceclient.Entities.Client;
 import com.microservicios.serviceclient.Entities.ClientPK;
 import com.microservicios.serviceclient.Repository.ClientConvertImp;
@@ -21,8 +22,8 @@ public class ClientConvertTest {
 
     private Client client;
     private List<Client> clients;
-    private ClientDTO clientDTO;
-    private List<ClientDTO> clientsDto;
+    private ClientRepositoryDTO clientRepositoryDTO;
+    private List<ClientRepositoryDTO> clientsRepositoryDTO;
 
     @BeforeEach
     public void setup(){
@@ -36,36 +37,36 @@ public class ClientConvertTest {
                 .last_name("moncada")
                 .age(27)
                 .city("Envigado").build();
-        clientDTO=ClientDTO.builder()
+        clientRepositoryDTO=ClientRepositoryDTO.builder()
                 .number_id(1052)
                 .type_id("cc")
                 .name("miguel")
                 .last_name("moncada")
                 .age(27)
                 .city("Envigado")
-                .photo("vacio").build();
-        clientsDto = Arrays.asList(clientDTO);
+                .id_photo("6111dbaa95514d59d84fd212").build();
+        clientsRepositoryDTO = Arrays.asList(clientRepositoryDTO);
         clients = Arrays.asList(client);
     }
 
     @Test
     public void  DTOToClientTest() {
-        Client clientResult=service.DTOToClient(this.clientDTO);
+        Client clientResult=service.DTOToClient(this.clientRepositoryDTO);
         Assertions.assertThat(clientResult).isNotNull();
     }
     @Test
     public void  clientToDTOTest() {
-        ClientDTO clientDTOResult=service.clientToDTO(this.client);
-        Assertions.assertThat(clientDTOResult).isNotNull();
+        ClientRepositoryDTO result=service.clientToDTO(this.client);
+        Assertions.assertThat(result).isNotNull();
     }
     @Test
     public void  listClientToDTOTest() {
-        List<ClientDTO> clientDTOResult=service.listClientToDTO(this.clients);
-        Assertions.assertThat(clientDTOResult.size()).isEqualTo(1);
+        List<ClientRepositoryDTO> result=service.listClientToDTO(this.clients);
+        Assertions.assertThat(result.size()).isEqualTo(1);
     }
     @Test
     public void  listDTOToClientTest() {
-        List<Client> clientsResult=service.listDTOToClient(this.clientsDto);
+        List<Client> clientsResult=service.listDTOToClient(this.clientsRepositoryDTO);
         Assertions.assertThat(clientsResult.size()).isEqualTo(1);
     }
 }
