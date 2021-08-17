@@ -8,8 +8,6 @@ import com.microservicios.serviceclient.Entities.ClientPK;
 import com.microservicios.serviceclient.Feign.PhotoFeign;
 import com.microservicios.serviceclient.Repository.ClientRepository;
 import com.microservicios.serviceclient.Services.ClientServiceImp;
-import com.microservicios.serviceclient.Services.ClientConvertServiceImp;
-import com.microservicios.serviceclient.Services.PhotoConvertServiceImp;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
