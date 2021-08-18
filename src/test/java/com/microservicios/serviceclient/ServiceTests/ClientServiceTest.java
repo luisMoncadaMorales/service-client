@@ -20,15 +20,14 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.Arrays;
 import java.util.List;
+
+import static org.mockito.ArgumentMatchers.any;
+
 @SpringBootTest
 public class ClientServiceTest {
     @InjectMocks
     private ClientServiceImp service;
 
-    @Mock
-    private ClientConvertServiceImp clientConvertService;
-    @Mock
-    private PhotoConvertServiceImp photoConvertService;
     @Mock
     private ClientRepository repository;
     @Mock
@@ -91,13 +90,8 @@ public class ClientServiceTest {
         Mockito.when(repository.deleteClient(1052,"cc")).thenReturn(true);
         Mockito.when(repository.getIdPhoto(1052,"cc")).thenReturn("6111dbaa95514d59d84fd212");
         Mockito.when(photoFeign.photosById(pks)).thenReturn(ResponseEntity.ok(photosDTO));
-        Mockito.when(clientConvertService.toClientsDTO(clientsRepositoryDTO,photosDTO)).thenReturn(clientsDto);
         Mockito.when(photoFeign.photoById("6111dbaa95514d59d84fd212")).thenReturn(ResponseEntity.ok(photoDTO));
-        Mockito.when(clientConvertService.toClientDTO(clientRepositoryDTO,photoDTO)).thenReturn(clientDTO);
-        Mockito.when(clientConvertService.toClientRepositoryDTO(clientDTO,photoDTO)).thenReturn(clientRepositoryDTO);
-        Mockito.when(photoFeign.savePhoto(photoDTO)).thenReturn(ResponseEntity.ok(photoDTO));
-        Mockito.when(photoFeign.savePhoto(null)).thenReturn(ResponseEntity.ok(null));
-        Mockito.when(photoConvertService.clientToPhoto(clientDTO,"6111dbaa95514d59d84fd212")).thenReturn(photoDTO);
+        Mockito.when(photoFeign.savePhoto(any())).thenReturn(ResponseEntity.ok(photoDTO));
         Mockito.when(photoFeign.deleteById("6111dbaa95514d59d84fd212")).thenReturn(ResponseEntity.ok("removed"));
         Mockito.when(photoFeign.deleteById("6111dbaa95514d59d84fd211")).thenReturn(ResponseEntity.ok("not found"));
     }
@@ -115,11 +109,6 @@ public class ClientServiceTest {
     public void saveClientTest() {
         ClientDTO clientDTOResult= service.saveClient(this.clientDTO);
         Assertions.assertThat(clientDTOResult.getPhoto()).isEqualTo("photo 1052");
-    }
-    @Test
-    public void saveClientElseTest() {
-        ClientDTO clientDTOResult= service.saveClient(ClientDTO.builder().build());
-        Assertions.assertThat(clientDTOResult).isNull();
     }
     @Test
     public void deleteClientTest() {
