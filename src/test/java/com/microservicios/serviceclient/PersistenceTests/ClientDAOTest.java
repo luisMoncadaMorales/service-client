@@ -1,10 +1,12 @@
 package com.microservicios.serviceclient.PersistenceTests;
 
 import com.microservicios.serviceclient.Entities.Client;
-import com.microservicios.serviceclient.Persistence.ClientRepository;
+import com.microservicios.serviceclient.Entities.ClientPK;
+import com.microservicios.serviceclient.Persistence.ClientDAO;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -15,26 +17,28 @@ import java.util.*;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class ClientRepositoryTest {
+public class ClientDAOTest {
     @Mock
-    private ClientRepository repository;
+    private ClientDAO repository;
 
     @BeforeEach
     public void setup(){
         MockitoAnnotations.openMocks(this);
-        Client client=Client.builder()
+        ClientPK clientPK= ClientPK.builder()
                 .number_id(1052)
-                .type_id("cc")
+                .type_id("cc").build();
+        Client client=Client.builder()
+                .clientPk(clientPK)
                 .name("miguel")
                 .last_name("moncada")
                 .age(27)
                 .city("Envigado").build();
         List<Client> clients = Arrays.asList(client);
-        Mockito.when(repository.clients()).thenReturn(clients);
+        Mockito.when(repository.clients(1)).thenReturn(clients);
     }
     @Test
     public void clientsTest(){
-        List<Client> clients=repository.clients();
+        List<Client> clients=repository.clients(1);
         Assertions.assertThat(clients.size()).isEqualTo(1);
     }
 }
